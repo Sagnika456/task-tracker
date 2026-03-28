@@ -1,0 +1,49 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+
+:root {
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --navbar: #6c63ff;
+  --text: #1a1a2e;
+  --text2: #666;
+  --border: #e0e0e0;
+  --input-bg: #f9f9f9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --primary: #6c63ff;
+  --primary-hover: #574fd6;
+}
+
+[data-theme='dark'] {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --navbar: #1a1a2e;
+  --text: #e0e0e0;
+  --text2: #aaa;
+  --border: #2e2e4a;
+  --input-bg: #12122a;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+input, textarea, select {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary);
+}
