@@ -2,10 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const { errorHandler } = require('./middleware/errorMiddleware');
 
 dotenv.config();
-
-// Connect database
 connectDB();
 
 const app = express();
@@ -18,7 +17,6 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 
-// Root route
 app.get('/', (req, res) => {
   res.send('Task Tracker API is running...');
 });
@@ -28,9 +26,8 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
+// Global Error Handler
+app.use(errorHandler);
 
-app.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
-);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
