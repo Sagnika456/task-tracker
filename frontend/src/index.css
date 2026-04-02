@@ -47,3 +47,16 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
   border-color: var(--primary);
 }
+html {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: block !important;
+  }
+}
