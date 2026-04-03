@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { motion } from 'framer-motion';
 import API from '../api/axios';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
@@ -113,15 +114,25 @@ export default function Dashboard() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '32px 16px' }}>
-        <div style={{ marginBottom: '20px' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        style={{ maxWidth: '1000px', margin: '0 auto', padding: '32px 16px' }}
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -18 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          style={{ marginBottom: '20px' }}
+        >
           <h2 style={{ color: 'var(--text)', marginBottom: '6px' }}>
             Welcome back, {user?.name || 'User'} 👋
           </h2>
           <p style={{ color: 'var(--text2)', fontSize: '14px' }}>
             Here’s an overview of your task productivity.
           </p>
-        </div>
+        </motion.div>
 
         {/* Stats */}
         <div
@@ -132,9 +143,13 @@ export default function Dashboard() {
             marginBottom: '28px',
           }}
         >
-          {statCards.map((s) => (
-            <div
+          {statCards.map((s, index) => (
+            <motion.div
               key={s.label}
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.08, duration: 0.5 }}
+              whileHover={{ y: -6, scale: 1.03 }}
               style={{
                 background: 'var(--card)',
                 borderRadius: '14px',
@@ -156,12 +171,15 @@ export default function Dashboard() {
               >
                 {s.label}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Search + Filter + Add */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.6 }}
           style={{
             background: 'var(--card)',
             borderRadius: '14px',
@@ -171,14 +189,16 @@ export default function Dashboard() {
           }}
         >
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               placeholder="🔍 Search tasks..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ flex: 1, minWidth: '200px', marginBottom: 0 }}
             />
 
-            <select
+            <motion.select
+              whileFocus={{ scale: 1.01 }}
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               style={{ width: 'auto', marginBottom: 0 }}
@@ -190,9 +210,11 @@ export default function Dashboard() {
               <option value="high">High Priority</option>
               <option value="medium">Medium Priority</option>
               <option value="low">Low Priority</option>
-            </select>
+            </motion.select>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => {
                 setEditTask(null);
                 setShowForm(true);
@@ -207,16 +229,20 @@ export default function Dashboard() {
                 fontWeight: '600',
                 fontSize: '14px',
                 whiteSpace: 'nowrap',
+                boxShadow: '0 10px 20px rgba(108,99,255,0.24)',
               }}
             >
               + Add Task
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Progress bar */}
         {stats.totalTasks > 0 && (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55, duration: 0.6 }}
             style={{
               background: 'var(--card)',
               borderRadius: '14px',
@@ -242,22 +268,27 @@ export default function Dashboard() {
                 overflow: 'hidden',
               }}
             >
-              <div
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${stats.completionRate}%` }}
+                transition={{ duration: 0.9, ease: 'easeOut' }}
                 style={{
                   background: 'linear-gradient(90deg, #6c63ff, #2ed573)',
                   height: '100%',
-                  width: `${stats.completionRate}%`,
                   borderRadius: '8px',
-                  transition: 'width 0.5s ease',
                 }}
               />
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Reminder Section */}
         {(overdueTasks.length > 0 || dueTodayTasks.length > 0) && (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 0.6 }}
+            whileHover={{ y: -3 }}
             style={{
               background: 'var(--card)',
               borderRadius: '14px',
@@ -277,9 +308,14 @@ export default function Dashboard() {
                 </strong>
                 <ul style={{ marginTop: '6px', paddingLeft: '18px' }}>
                   {overdueTasks.map((task) => (
-                    <li key={task._id} style={{ fontSize: '14px', color: 'var(--text)' }}>
+                    <motion.li
+                      key={task._id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      style={{ fontSize: '14px', color: 'var(--text)' }}
+                    >
                       {task.title}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
@@ -292,19 +328,29 @@ export default function Dashboard() {
                 </strong>
                 <ul style={{ marginTop: '6px', paddingLeft: '18px' }}>
                   {dueTodayTasks.map((task) => (
-                    <li key={task._id} style={{ fontSize: '14px', color: 'var(--text)' }}>
+                    <motion.li
+                      key={task._id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      style={{ fontSize: '14px', color: 'var(--text)' }}
+                    >
                       {task.title}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Task list */}
         {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text2)' }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.75, duration: 0.6 }}
+            style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text2)' }}
+          >
             <div style={{ fontSize: '56px', marginBottom: '16px' }}>📭</div>
             <p style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px', color: 'var(--text)' }}>
               No tasks found
@@ -312,19 +358,25 @@ export default function Dashboard() {
             <p style={{ fontSize: '14px' }}>
               {search ? 'Try a different search term' : 'Click "+ Add Task" to get started!'}
             </p>
-          </div>
+          </motion.div>
         ) : (
-          filtered.map((task) => (
-            <TaskCard
+          filtered.map((task, index) => (
+            <motion.div
               key={task._id}
-              task={task}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
-              onRefresh={refreshDashboard}
-            />
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75 + index * 0.05, duration: 0.45 }}
+            >
+              <TaskCard
+                task={task}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onRefresh={refreshDashboard}
+              />
+            </motion.div>
           ))
         )}
-      </div>
+      </motion.div>
 
       {showForm && (
         <TaskForm

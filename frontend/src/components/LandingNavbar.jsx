@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LandingNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -70, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
       style={{
         width: '100%',
         position: 'sticky',
@@ -26,29 +30,54 @@ export default function LandingNavbar() {
           alignItems: 'center',
         }}
       >
-        <h2 style={{ color: 'white', margin: 0, fontWeight: '700' }}>
+        <motion.h2
+          initial={{ opacity: 0, x: -25 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          whileHover={{ scale: 1.05 }}
+          style={{ color: 'white', margin: 0, fontWeight: '700', cursor: 'pointer' }}
+        >
           TaskTracker
-        </h2>
+        </motion.h2>
 
         <div
+          className="desktop-menu"
           style={{
             display: 'flex',
             gap: '22px',
             alignItems: 'center',
           }}
-          className="desktop-menu"
         >
-          <a href="#home" style={navLink}>Home</a>
-          <a href="#about" style={navLink}>About</a>
-          <a href="#pages" style={navLink}>Pages</a>
-          <a href="#features" style={navLink}>Features</a>
-          <a href="#contact" style={navLink}>Contact</a>
-          <Link to="/login" style={getStartedBtn}>Get Started</Link>
+          <motion.a href="#home" style={navLink} whileHover={{ scale: 1.08, color: '#ffffff' }}>
+            Home
+          </motion.a>
+
+          <motion.a href="#about" style={navLink} whileHover={{ scale: 1.08, color: '#ffffff' }}>
+            About
+          </motion.a>
+
+          <motion.a href="#pages" style={navLink} whileHover={{ scale: 1.08, color: '#ffffff' }}>
+            Pages
+          </motion.a>
+
+          <motion.a href="#features" style={navLink} whileHover={{ scale: 1.08, color: '#ffffff' }}>
+            Features
+          </motion.a>
+
+          <motion.a href="#contact" style={navLink} whileHover={{ scale: 1.08, color: '#ffffff' }}>
+            Contact
+          </motion.a>
+
+          <motion.div whileHover={{ scale: 1.08, y: -2 }} whileTap={{ scale: 0.95 }}>
+            <Link to="/login" style={getStartedBtn}>Get Started</Link>
+          </motion.div>
         </div>
 
-        <button
+        <motion.button
           onClick={() => setMenuOpen(!menuOpen)}
           className="mobile-menu-btn"
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.1 }}
           style={{
             background: 'transparent',
             border: 'none',
@@ -58,30 +87,85 @@ export default function LandingNavbar() {
             display: 'none',
           }}
         >
-          ☰
-        </button>
+          {menuOpen ? '✕' : '☰'}
+        </motion.button>
       </div>
 
-      {menuOpen && (
-        <div
-          className="mobile-menu"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px',
-            padding: '16px 20px 20px',
-            background: 'rgba(10, 10, 30, 0.97)',
-          }}
-        >
-          <a href="#home" style={navLink}>Home</a>
-          <a href="#about" style={navLink}>About</a>
-          <a href="#pages" style={navLink}>Pages</a>
-          <a href="#features" style={navLink}>Features</a>
-          <a href="#contact" style={navLink}>Contact</a>
-          <Link to="/login" style={getStartedBtn}>Get Started</Link>
-        </div>
-      )}
-    </nav>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35 }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+              padding: '16px 20px 20px',
+              background: 'rgba(10, 10, 30, 0.97)',
+              overflow: 'hidden',
+            }}
+          >
+            <motion.a
+              href="#home"
+              style={navLink}
+              whileHover={{ x: 6, color: '#ffffff' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </motion.a>
+
+            <motion.a
+              href="#about"
+              style={navLink}
+              whileHover={{ x: 6, color: '#ffffff' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              About
+            </motion.a>
+
+            <motion.a
+              href="#pages"
+              style={navLink}
+              whileHover={{ x: 6, color: '#ffffff' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Pages
+            </motion.a>
+
+            <motion.a
+              href="#features"
+              style={navLink}
+              whileHover={{ x: 6, color: '#ffffff' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Features
+            </motion.a>
+
+            <motion.a
+              href="#contact"
+              style={navLink}
+              whileHover={{ x: 6, color: '#ffffff' }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Contact
+            </motion.a>
+
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Link
+                to="/login"
+                style={{ ...getStartedBtn, display: 'inline-block', width: 'fit-content' }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Get Started
+              </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 }
 
@@ -90,6 +174,7 @@ const navLink = {
   textDecoration: 'none',
   fontSize: '15px',
   fontWeight: '500',
+  transition: 'all 0.3s ease',
 };
 
 const getStartedBtn = {
@@ -99,4 +184,5 @@ const getStartedBtn = {
   borderRadius: '10px',
   textDecoration: 'none',
   fontWeight: '600',
+  boxShadow: '0 10px 25px rgba(108,99,255,0.35)',
 };
