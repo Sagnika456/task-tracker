@@ -44,7 +44,14 @@ router.get('/stats', protect, async (req, res) => {
 // Get all tasks with search, filter, and sort
 router.get('/', protect, async (req, res) => {
   try {
-    const { search, status, priority, category, sortBy = 'createdAt', order = 'desc' } = req.query;
+    const {
+      search,
+      status,
+      priority,
+      category,
+      sortBy = 'createdAt',
+      order = 'desc',
+    } = req.query;
 
     const query = { user: req.user._id };
 
@@ -99,6 +106,7 @@ router.post('/', protect, async (req, res) => {
       category,
       dueDate,
       completedAt: status === 'completed' ? new Date() : null,
+      reminderSent: false,
     });
 
     res.status(201).json(task);
@@ -127,13 +135,23 @@ router.put('/:id', protect, async (req, res) => {
 
     if (title !== undefined) task.title = title;
     if (description !== undefined) task.description = description;
+
     if (status !== undefined) {
       task.status = status;
       task.completedAt = status === 'completed' ? new Date() : null;
+
+      if (status !== 'completed') {
+        task.reminderSent = false;
+      }
     }
+
     if (priority !== undefined) task.priority = priority;
     if (category !== undefined) task.category = category;
-    if (dueDate !== undefined) task.dueDate = dueDate;
+
+    if (dueDate !== undefined) {
+      task.dueDate = dueDate;
+      task.reminderSent = false;
+    }
 
     const updatedTask = await task.save();
 
